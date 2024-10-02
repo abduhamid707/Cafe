@@ -1,12 +1,16 @@
 .menu-container {
   width: 100%;
   margin: 0 auto;
-  // scroll-behavior: smooth; /* Ensure smooth scroll within the container */
+  .ass{
+    // display: flex;
+    overflow-x: auto; // Gorizontal scrollga imkoniyat yaratish
+  }
   .restaurant_categories {
     display: flex;
     justify-content: flex-start; // Flex container bo'lib, boshlanish joyidan boshlaydi
     margin-top: -20px;
     overflow-x: auto; // X o'qi bo'yicha scroll qilish
+    
     white-space: nowrap; // Kategoriyalar bir qatorda bo'lishi uchun
     padding: 10px 0; // Kategoriyalarning chetlari uchun
     background-color: #f0f0f0; // Background rang
@@ -31,49 +35,9 @@
       }
     }
   }
-
   .category-section {
     margin-top: 30px; // Kategoriyalar orasidagi bo'shliq
   }
-
-  // .menu-item {
-  //   display: flex;
-  //   align-items: center;
-  //   margin-bottom: 15px;
-  //   padding: 10px 10px;
-  //   border: 1px solid #eaeaea;
-  //   border-radius: 8px;
-  //   background-color: #fff;
-  //   position: relative;
-
-  //   .menu-item-img {
-  //     max-width: 100px; // O'lchamni belgilash
-  //     margin-right: 15px;
-  //   }
-
-  //   img {
-  //     width: 100%;
-  //     height: auto;
-  //     border-radius: 5px;
-  //     object-fit: cover;
-  //   }
-
-  //   .menu-item-info {
-  //     flex: 1; // Qolgan joyni egallash
-  //     background: red;
-
-  //     p {
-  //       margin: 0 !important;
-  //       font-weight: 800;
-  //       font-size: 18px;
-  //     }
-  //   }
-  // }
-
-  .category-section {
-    margin-top: 30px; // Kategoriyalar orasidagi bo'shliq
-  }
-
   .menu-item {
     display: flex;
     align-items: center;
@@ -111,7 +75,7 @@
   .menu-item {
     display: flex;
     align-items: stretch; /* Ikkala bo‘lim ham bir xil bo‘lishi uchun */
-    margin-bottom: 15px;
+    margin-bottom: 7px;
     padding: 10px 10px;
     border: 1px solid #eaeaea;
     border-radius: 8px;
