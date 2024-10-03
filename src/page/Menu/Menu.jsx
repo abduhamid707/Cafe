@@ -9,6 +9,7 @@ const Menu = () => {
     const categorySectionRefs = useRef({});
     const categoryRefs = useRef({});
     const categoriesContainerRef = useRef(null);
+    const [clickCategory, setClickCategory] = useState(true); // default true
 
     const uniqueCategories = [...new Set(menuData.map(item => item.category))].map((category) => {
         return {
@@ -26,10 +27,8 @@ const Menu = () => {
     }, []);
 
     const handleCategoryClick = (categoryId) => {
-        setActiveCategory("");
-        console.log('activeCategory :', activeCategory);
+        setClickCategory(false); // clickCategory ni false qilamiz
 
-        
         const ref = categorySectionRefs.current[categoryId];
         if (ref) {
             const { top } = ref.getBoundingClientRect();
@@ -51,14 +50,26 @@ const Menu = () => {
         });
     };
 
+    // Scroll hodisalarini qo'shish va o'chirish
     useEffect(() => {
-        const onScroll = () => handleScroll();
+        const onScroll = () => {
+            if (clickCategory) {
+                handleScroll(); // faqat clickCategory true bo'lsa
+            } else {
+                setTimeout(() => {
+                    setClickCategory(true);
+                }, 800);
+            }
+        };
+
         window.addEventListener("scroll", onScroll);
+
         return () => {
             window.removeEventListener("scroll", onScroll);
         };
-    }, [activeCategory, uniqueCategories]);
+    }, [clickCategory, activeCategory, uniqueCategories]);
 
+    // Category o'zgarishi bilan scrollni markazlashtirish
     useEffect(() => {
         if (activeCategory && categoryRefs.current[activeCategory]) {
             const categoryButton = categoryRefs.current[activeCategory];
@@ -74,7 +85,7 @@ const Menu = () => {
 
                 categoriesContainer.scrollTo({
                     left: scrollPosition,
-                    // behavior: 'smooth'
+                    behavior: 'smooth'
                 });
             }
         }
