@@ -26,12 +26,16 @@ const Menu = () => {
     }, []);
 
     const handleCategoryClick = (categoryId) => {
+        setActiveCategory("");
+        console.log('activeCategory :', activeCategory);
+
+        
         const ref = categorySectionRefs.current[categoryId];
         if (ref) {
             const { top } = ref.getBoundingClientRect();
             const offset = window.scrollY + top - 125;
             window.scrollTo({ top: offset, behavior: 'smooth' });
-            setActiveCategory(categoryId);
+            // setActiveCategory(categoryId);
         }
     };
 
@@ -70,7 +74,7 @@ const Menu = () => {
 
                 categoriesContainer.scrollTo({
                     left: scrollPosition,
-                    behavior: 'smooth'
+                    // behavior: 'smooth'
                 });
             }
         }
