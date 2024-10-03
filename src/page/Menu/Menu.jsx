@@ -61,7 +61,6 @@ const Menu = () => {
                 }, 800);
             }
         };
-
         window.addEventListener("scroll", onScroll);
 
         return () => {
