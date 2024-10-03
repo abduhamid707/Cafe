@@ -331,16 +331,135 @@
 
 
 
+// import React, { useState, useEffect, useRef } from "react";
+// import "./style.scss"; // Style fayllar
+// import { menuData } from "../../db/data"; // Menu ma'lumotlar
+
+// const Menu = () => {
+//     const [activeCategory, setActiveCategory] = useState("foods");
+//     const categorySectionRefs = useRef({}); // Har bir kategoriya bo'limi uchun refs
+//     const categoryRefs = useRef({}); // Har bir kategoriya tugmasi uchun refs
+//     const categoriesContainerRef = useRef(null);
+//     const uniqueCategories = [...new Set(menuData.map(item => item.category))].map((category) => {
+//         return {
+//             id: category,
+//             label: menuData.find(item => item.category === category).label
+//         };
+//     });
+
+//     // Kategoriya tugmasi bosilganda bo'limga scroll qilish
+//     const handleCategoryClick = (categoryId) => {
+//         const ref = categorySectionRefs.current[categoryId];
+//         if (ref) {
+//             ref.scrollIntoView({ behavior: 'smooth', block: 'start' });
+//             setActiveCategory(categoryId);
+//         }
+//     };
+
+//     // active classni avtomatik o'tkazish va Categoryni scroll qilish uchun
+//     const handleScroll = () => {
+//         const scrollPosition = window.scrollY + 350; // Yaxshiroq scroll deteksiyasi uchun
+//         uniqueCategories.forEach(category => {
+//             const ref = categorySectionRefs.current[category.id];
+//             if (ref && ref.offsetTop <= scrollPosition && ref.offsetTop + ref.offsetHeight > scrollPosition) {
+//                 if (activeCategory !== category.id) {
+//                     setActiveCategory(category.id);
+//                 }
+//             }
+//         });
+//     };
+//     useEffect(() => {
+//         if (activeCategory && categoryRefs.current[activeCategory]) {
+//             const categoryButton = categoryRefs.current[activeCategory];
+//             const categoriesContainer = categoriesContainerRef.current;
+
+//             if (categoryButton && categoriesContainer) {
+//                 const containerScrollLeft = categoriesContainer.scrollLeft;
+//                 const containerWidth = categoriesContainer.offsetWidth;
+//                 const buttonOffsetLeft = categoryButton.offsetLeft;
+//                 const buttonWidth = categoryButton.offsetWidth;
+
+//                 // Tugma to'liq ko'rinib turishi uchun scrollLeftni to'g'rilash
+//                 const scrollPosition = buttonOffsetLeft - (containerWidth / 2) + (buttonWidth / 2);
+                
+//                 categoriesContainer.scrollTo({
+//                     left: scrollPosition,
+//                     behavior: 'smooth'
+//                 });
+//             }
+//         }
+//     }, [activeCategory]);
+//     useEffect(() => {
+//         window.addEventListener("scroll", handleScroll);
+//         return () => window.removeEventListener("scroll", handleScroll);
+//     }, [activeCategory]);
+    
+//     return (
+//         <div className="container">
+//             <div className="menu-container">
+//                 {/* Kategoriyalar tugmasi */}
+//                 {/* <div className="restaurant_categories" > */}
+//                 <div className="restaurant_categories" ref={categoriesContainerRef}>
+//                 {/* <div className="restaurant_categories" ref={categoriesContainerRef}> */}
+//                     {uniqueCategories.map((category,index) => (
+//                         <button
+//                             key={category.id+index}
+//                             className={`category-item ${activeCategory === category.id ? 'active' : ''}`}
+//                             ref={el => (categoryRefs.current[category.id] = el)} // Kategoriya tugmalari uchun refs
+//                             onClick={() => handleCategoryClick(category.id)}
+//                             aria-pressed={activeCategory === category.id}
+//                         >
+//                             {category.label}
+//                         </button>
+//                     ))}
+//                 </div>
+
+//                 {/* Menyu bo'limlari */}
+//                 {uniqueCategories.map((category) => (
+//                     <div
+//                         key={category.id}
+//                         data-category={category.id} // Bu yerda data-category ni belgilaymiz
+//                         ref={el => (categorySectionRefs.current[category.id] = el)} // ref ni to'g'ri o'rnatish
+//                         className="category-section menu-items"
+//                     >
+//                         <h2>{category.label}</h2>
+//                         {menuData.filter(item => item.category === category.id).map((item, index) => (
+//     <div key={`${item.id}-${index}`} className="menu-item">
+//         <div className="menu-item-img">
+//             <img src={item.foodImg} alt={item.title} />
+//         </div>
+//         <div className="menu-item-info">
+//             <p>{item.title}</p>
+//             <p>{item.price}</p>
+//         </div>
+//     </div>
+// ))}
+
+//                     </div>
+//                 ))}
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default Menu;
+
+
+
+
+
+
+
+
 import React, { useState, useEffect, useRef } from "react";
 import "./style.scss"; // Style fayllar
 import { menuData } from "../../db/data"; // Menu ma'lumotlar
 
 const Menu = () => {
     const [activeCategory, setActiveCategory] = useState("foods");
-    console.log('activeCategory :', activeCategory);
     const categorySectionRefs = useRef({}); // Har bir kategoriya bo'limi uchun refs
     const categoryRefs = useRef({}); // Har bir kategoriya tugmasi uchun refs
-    const categoriesContainerRef = useRef(null); // Kategoriya tugmalari containeri uchun ref
+    const categoriesContainerRef = useRef(null); 
 
     const uniqueCategories = [...new Set(menuData.map(item => item.category))].map((category) => {
         return {
@@ -352,60 +471,69 @@ const Menu = () => {
     // Kategoriya tugmasi bosilganda bo'limga scroll qilish
     const handleCategoryClick = (categoryId) => {
         const ref = categorySectionRefs.current[categoryId];
-        console.log('categorySectionRefs :', categorySectionRefs);
         if (ref) {
-            ref.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Scrollni to'g'ri bo'limga olib borish
+            const { top } = ref.getBoundingClientRect(); // Elementning joylashuvini olish
+            const offset = window.scrollY + top; // Scrollni to'g'ri bo'limga olib borish
+            window.scrollTo({ top: offset, behavior: 'smooth' }); // Smooth scroll
             setActiveCategory(categoryId);
         }
     };
 
-    // active classni avtomatik o'tkazish va Categoryni scroll qilish uchun
+    // active classni avtomatik o'tkazish
     const handleScroll = () => {
-        const scrollPosition = window.scrollY + 350; // Yaxshiroq scroll deteksiyasi uchun
+        const scrollPosition = window.scrollY + 250; // Yaxshiroq scroll deteksiyasi uchun
         uniqueCategories.forEach(category => {
             const ref = categorySectionRefs.current[category.id];
             if (ref && ref.offsetTop <= scrollPosition && ref.offsetTop + ref.offsetHeight > scrollPosition) {
                 if (activeCategory !== category.id) {
-                    setActiveCategory(category.id); // Faqat aktiv kategoriya o'zgarganda update qiladi
+                    setActiveCategory(category.id);
                 }
             }
         });
     };
 
+    // Scroll eventini qo'shish
     useEffect(() => {
-        const activeCategoryButton = categoryRefs.current[activeCategory];
-    
-        if (activeCategoryButton && categoriesContainerRef.current) {
-            // Aktiv kategoriya tugmasini scroll qilish
-            const containerWidth = categoriesContainerRef.current.offsetWidth;
-            const buttonOffsetLeft = activeCategoryButton.offsetLeft;
-            const buttonWidth = activeCategoryButton.offsetWidth;
-    
-            categoriesContainerRef.current.scrollTo({
-                left: buttonOffsetLeft - (containerWidth / 2) + (buttonWidth / 2),
-                behavior: "smooth"
-            });
-        }
-    
-        // Sahifa scroll holatini kuzatish uchun listener qo'shish
-        window.addEventListener("scroll", handleScroll);
-    
-        // Hook tozalash funksiyasi (listenerni o'chirish)
+        const onScroll = () => handleScroll(); // onScrollni chaqirish
+
+        window.addEventListener("scroll", onScroll); // Scrollni tinglash
         return () => {
-            window.removeEventListener("scroll", handleScroll);
+            window.removeEventListener("scroll", onScroll); // Cleanup qilish
         };
-    }, [activeCategory]); // `activeCategory` o'zgarishini kuzatadi
-    
+    }, [activeCategory, uniqueCategories]); // `activeCategory` va `uniqueCategories` o'zgarganda qayta ishlaydi
+
+    // activeCategory o'zgarganda kategoriya tugmasi ko'rinadigan qilib scroll qilish
+    useEffect(() => {
+        if (activeCategory && categoryRefs.current[activeCategory]) {
+            const categoryButton = categoryRefs.current[activeCategory];
+            const categoriesContainer = categoriesContainerRef.current;
+
+            if (categoryButton && categoriesContainer) {
+                const containerScrollLeft = categoriesContainer.scrollLeft;
+                const containerWidth = categoriesContainer.offsetWidth;
+                const buttonOffsetLeft = categoryButton.offsetLeft;
+                const buttonWidth = categoryButton.offsetWidth;
+
+                // Tugma to'liq ko'rinib turishi uchun scrollLeftni to'g'rilash
+                const scrollPosition = buttonOffsetLeft - (containerWidth / 2) + (buttonWidth / 2);
+                
+                categoriesContainer.scrollTo({
+                    left: scrollPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    }, [activeCategory]);
+
     return (
         <div className="container">
             <div className="menu-container">
                 {/* Kategoriyalar tugmasi */}
-                {/* <div className="restaurant_categories" > */}
-                <div className="restaurant_categories" >
-                {/* <div className="restaurant_categories" ref={categoriesContainerRef}> */}
-                    {uniqueCategories.map((category,index) => (
+                <div className="restaurant_categories" ref={categoriesContainerRef}>
+                    {uniqueCategories.map((category, index) => (
                         <button
-                            key={category.id+index}
+                            key={category.id + index}
                             className={`category-item ${activeCategory === category.id ? 'active' : ''}`}
                             ref={el => (categoryRefs.current[category.id] = el)} // Kategoriya tugmalari uchun refs
                             onClick={() => handleCategoryClick(category.id)}
@@ -426,17 +554,16 @@ const Menu = () => {
                     >
                         <h2>{category.label}</h2>
                         {menuData.filter(item => item.category === category.id).map((item, index) => (
-    <div key={`${item.id}-${index}`} className="menu-item">
-        <div className="menu-item-img">
-            <img src={item.foodImg} alt={item.title} />
-        </div>
-        <div className="menu-item-info">
-            <p>{item.title}</p>
-            <p>{item.price}</p>
-        </div>
-    </div>
-))}
-
+                            <div key={`${item.id}-${index}`} className="menu-item">
+                                <div className="menu-item-img">
+                                    <img src={item.foodImg} alt={item.title} />
+                                </div>
+                                <div className="menu-item-info">
+                                    <p>{item.title}</p>
+                                    <p>{item.price}</p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 ))}
             </div>
@@ -445,9 +572,6 @@ const Menu = () => {
 };
 
 export default Menu;
-
-
-
 
 
 
