@@ -35,6 +35,9 @@
       }
     }
   }
+  .restaurant_categories::-webkit-scrollbar {
+    display: none; /* Scroll chizig'ini olib tashlash */
+}
   .category-section {
     margin-top: 30px; // Kategoriyalar orasidagi bo'shliq
   }
